@@ -23,11 +23,6 @@ if [ $# -ne $EXPECTED_ARGS ]; then
 fi
 
 #-------------------------------------------------------------------------------
-# Hardware folder
-#-------------------------------------------------------------------------------
-RTL_FOLDER=$1
-
-#-------------------------------------------------------------------------------
 # File project
 #-------------------------------------------------------------------------------
 FILE_PROJECT=$2/$3.prj
@@ -40,7 +35,7 @@ touch $FILE_PROJECT
 
 unamestr=`uname`
 
-for module in $RTL_FOLDER; do
+for module in $1; do
     for file in $(find $module -name "*.v")
     do
     if [[ "$unamestr" == 'Linux' ]]; then

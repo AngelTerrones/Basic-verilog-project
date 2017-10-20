@@ -5,6 +5,7 @@ SHELL=bash
 .PYTEST=pytest
 
 .RTL_FOLDER=$(shell cd rtl; pwd)
+.VERILOG_FILES=$(shell find $(.RTL_FOLDER) -name "*.v")
 .TEST_FOLDER=$(shell cd test; pwd)
 .SCRIPT_FOLDER=$(shell cd scripts; pwd)
 
@@ -40,19 +41,16 @@ test_alu: check_alu
 # ********************************************************************
 # Implementation
 # ********************************************************************
-build-bitstream: $(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).bit
-
-build-prom: build-bitstream $(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).mcs
+build-prom: $(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).mcs
 
 program-fpga: build-prom
 	@$(.SCRIPT_FOLDER)/program_fpga.sh $(.PROJECT_NAME) $(.BIT_FOLDER) $(.FOUT)
 
-$(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).bit: ucf/pines.ucf
+# ---
+$(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).mcs: $(.VERILOG_FILES) ucf/pines.ucf
 	@mkdir -p $(.FOUT)
 	@$(.SCRIPT_FOLDER)/create_project.sh $(.RTL_FOLDER) $(.FOUT) $(.PROJECT_NAME)
 	@$(.SCRIPT_FOLDER)/create_bitstream.sh $(.FPGA) $(.FOUT) $(.BIT_FOLDER) $(.PROJECT_NAME) $(.TOPE_V)
-
-$(.FOUT)/$(.BIT_FOLDER)/$(.PROJECT_NAME).mcs:
 	@$(.SCRIPT_FOLDER)/generate_prom_file.sh $(.PROJECT_NAME) $(.BIT_FOLDER) $(.FOUT)
 
 # ********************************************************************

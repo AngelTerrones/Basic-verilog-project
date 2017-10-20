@@ -12,8 +12,12 @@ SHELL=bash
 #-------------------------------------------------------------------------------
 # XILINX ISE
 #-------------------------------------------------------------------------------
-.ISE_BIN=/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64
-#.ISE_BIN=/cygdrive/c/Xilinx/14.7/ISE_DS/ISE/bin/nt
+.OS:=$(shell uname)
+ifeq ($(.OS), Linux)
+		.ISE_BIN=/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64
+else
+		.ISE_BIN=/cygdrive/c/Xilinx/14.7/ISE_DS/ISE/bin/nt
+endif
 .PROJECT_NAME=Uname
 .TOPE_V=tope
 .FPGA=xc3s200-ft256-4
